@@ -1,6 +1,4 @@
 package com.example.webviewexample;
-
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
@@ -9,13 +7,13 @@ import android.view.View;
 import android.webkit.WebView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
- 
-public class WebViewActivity extends Activity {
+public class DataPullActivity extends Activity {
 
 	private WebView webView;
 	private ExtendedWebViewClient eWebViewC;
 	private Handler mHandler = new Handler();
-	//= new WebView(this);
+	//How to output a message:
+	//Toast.makeText(getApplicationContext(), "Message", Toast.LENGTH_LONG).show();
 	private String guXpress = "https://guxpress.gannon.edu/";
 	
 	@SuppressLint("SetJavaScriptEnabled")
@@ -29,10 +27,9 @@ public class WebViewActivity extends Activity {
 		pb.setMax(5);
 		class MyJavaScriptInterface
 		{
-		    @SuppressWarnings("unused")
+			@SuppressWarnings("unused")
 		    public void processHTML(String loaded)
 		    {
-		    	//Toast.makeText(getApplicationContext(), "Made it to process html! var:" + loaded, Toast.LENGTH_LONG).show();
 		    	 if(!loaded.equals("true")){
 		    		 Toast.makeText(getApplicationContext(), "Page returned " + loaded , Toast.LENGTH_SHORT).show();
 		    		 mHandler.postDelayed(new Runnable() {
@@ -48,8 +45,6 @@ public class WebViewActivity extends Activity {
 		    		 mHandler.postDelayed(new Runnable() {
 		    	            public void run() {
 		    	            	//LOG IN
-		    	            	Toast.makeText(getApplicationContext(), "user is:" + getIntent().getStringExtra("username"), Toast.LENGTH_LONG).show();
-		    	            	Toast.makeText(getApplicationContext(), "pass is:" + getIntent().getStringExtra("password"), Toast.LENGTH_LONG).show();
 		    	            	webView.loadUrl("javascript:document.getElementById('USER_NAME').value=\"" + getIntent().getStringExtra("username") + "\"");
 		    	            	webView.loadUrl("javascript:document.getElementById('CURR_PWD').value=\""+ getIntent().getStringExtra("password") +"\"");
 		    	            	webView.loadUrl("javascript:document.getElementsByClassName('shortButton')[0].click()");

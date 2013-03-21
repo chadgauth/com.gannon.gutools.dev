@@ -9,7 +9,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
  
-public class MainActivity extends Activity {
+public class LoginActivity extends Activity {
  
 	private Button button;
  
@@ -25,7 +25,7 @@ public class MainActivity extends Activity {
 		  public void onClick(View arg0) {
 			EditText ur = (EditText)findViewById(R.id.editText1);
 			EditText ps = (EditText)findViewById(R.id.editText2);
-		    Intent intent = new Intent(context, WebViewActivity.class);
+		    Intent intent = new Intent(context, DataPullActivity.class);
 		    intent.putExtra("username", ur.getText().toString());
 		    intent.putExtra("password", ps.getText().toString());
 		    startActivity(intent);

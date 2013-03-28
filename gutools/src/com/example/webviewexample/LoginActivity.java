@@ -1,13 +1,14 @@
 package com.example.webviewexample;
 
-import android.app.Activity;
+import org.holoeverywhere.widget.Button;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.EditText;
+import org.holoeverywhere.widget.EditText;
+import org.holoeverywhere.app.Activity;
  
 public class LoginActivity extends Activity {
  

@@ -1,13 +1,15 @@
 package com.example.webviewexample;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.ProgressBar;
-import android.widget.Toast;
+
+import org.holoeverywhere.widget.ProgressBar;
+import org.holoeverywhere.widget.Toast;
+import org.holoeverywhere.app.Activity;
+
 public class DataPullActivity extends Activity {
 
 	private WebView webView;

@@ -1,10 +1,10 @@
 <resources>
 
-    <string name="app_name">WebViewExample</string>
+    <string name="app_name">GU Toolbox</string>
     <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
-    <string name="title_activity_main">MainActivity</string>
-    <string name="title_activity_web_view">WebViewActivity</string>
+    <string name="title_activity_main">GU Toolbox</string>
+    <string name="title_activity_web_view">Class Schedule</string>
     <string name="username"/>
     <string name="password"/>
 

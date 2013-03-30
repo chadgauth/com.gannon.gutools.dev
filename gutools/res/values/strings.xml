@@ -7,5 +7,12 @@
     <string name="title_activity_web_view">Class Schedule</string>
     <string name="username"/>
     <string name="password"/>
+    <string-array name="nav_list">
+        <item>Home</item>
+        <item >Events</item>
+        <item >Classes</item>
+        <item >Assignments</item>
+        <item >WERG Stream</item>
+    </string-array>
 
 </resources>

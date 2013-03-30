@@ -1,4 +1,4 @@
-package com.example.webviewexample;
+package com.gannon.gutools;
 
 import org.holoeverywhere.widget.Button;
 
@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import org.holoeverywhere.widget.EditText;
 import org.holoeverywhere.app.Activity;
+
+import com.example.webviewexample.R;
  
 public class LoginActivity extends Activity {
  
@@ -35,6 +37,21 @@ public class LoginActivity extends Activity {
  
 		});
  
+	}
+
+	@Override
+	protected void onDestroy() {
+	    super.onDestroy();
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
 	}
  
 }

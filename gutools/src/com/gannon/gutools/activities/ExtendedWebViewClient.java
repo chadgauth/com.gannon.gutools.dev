@@ -1,4 +1,4 @@
-package com.gannon.gutools;
+package com.gannon.gutools.activities;
 
 import android.graphics.Bitmap;
 import android.webkit.WebView;

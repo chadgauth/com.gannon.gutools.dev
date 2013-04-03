@@ -1,4 +1,4 @@
-package com.gannon.gutools;
+package com.gannon.gutools.activities;
 
 import org.holoeverywhere.widget.Button;
 
@@ -33,7 +33,6 @@ public class LoginActivity extends Activity {
 		    intent.putExtra("password", ps.getText().toString());
 		    startActivity(intent);
 		  }
-		  
  
 		});
  

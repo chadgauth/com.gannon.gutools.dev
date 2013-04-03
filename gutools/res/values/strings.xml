@@ -9,10 +9,20 @@
     <string name="password"/>
     <string-array name="nav_list">
         <item>Home</item>
-        <item >Events</item>
-        <item >Classes</item>
-        <item >Assignments</item>
-        <item >WERG Stream</item>
+        <item>Events</item>
+        <item>Classes</item>
+        <item>Assignments</item>
+        <item>WERG Stream</item>
     </string-array>
+    <string name="home">Home</string>
+    <string name="events">Events</string>
+    <string name="classes">Classes</string>
+    <string name="assignments">Assignments</string>
+    <string name="WERGStream">WERG Stream</string>
+   	<string name="button_mmswma">Listen Live</string>
+	<string name="text_exception">Error</string>
+	<string name="text_buffering">Buffering&#8230;</string>
+	<string name="text_playing">Stop Listening</string>
+	<string name="live_stream">mms://wstream.gannon.edu/WERGi</string>
 
 </resources>

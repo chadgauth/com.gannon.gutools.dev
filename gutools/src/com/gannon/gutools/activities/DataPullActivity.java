@@ -1,19 +1,21 @@
-package com.gannon.gutools;
+package com.gannon.gutools.activities;
+import org.holoeverywhere.app.Activity;
+import org.holoeverywhere.widget.ProgressBar;
+import org.holoeverywhere.widget.Toast;
+
+import com.example.webviewexample.R;
+
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import org.holoeverywhere.widget.ProgressBar;
-import org.holoeverywhere.widget.Toast;
-import org.holoeverywhere.app.Activity;
-
-import com.example.webviewexample.R;
-
 public class DataPullActivity extends Activity {
-
+	final Context context = this;
 	private WebView webView;
 	private ExtendedWebViewClient eWebViewC;
 	private Handler mHandler = new Handler();
@@ -79,7 +81,8 @@ public class DataPullActivity extends Activity {
 	            	//webView.setVisibility(View.VISIBLE);
 	            	//pb.setVisibility(View.INVISIBLE);
 			    	webView.loadUrl("javascript:window.HTMLOUT.processSchedule(document.getElementsByClassName('envisionWindow')[1].childNodes[4].innerHTML);");
-			    	
+			    	Intent intent = new Intent(context, HomeActivity.class);
+				    startActivity(intent);
 			    }
 	    			});
 			    }

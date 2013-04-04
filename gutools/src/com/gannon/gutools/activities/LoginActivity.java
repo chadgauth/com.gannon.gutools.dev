@@ -10,7 +10,7 @@ import android.view.View.OnClickListener;
 import org.holoeverywhere.widget.EditText;
 import org.holoeverywhere.app.Activity;
 
-import com.example.webviewexample.R;
+import com.gannon.gutools.dev.R;
  
 public class LoginActivity extends Activity {
  

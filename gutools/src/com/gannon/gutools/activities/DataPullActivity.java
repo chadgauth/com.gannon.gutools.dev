@@ -3,7 +3,7 @@ import org.holoeverywhere.app.Activity;
 import org.holoeverywhere.widget.ProgressBar;
 import org.holoeverywhere.widget.Toast;
 
-import com.example.webviewexample.R;
+import com.gannon.gutools.dev.R;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

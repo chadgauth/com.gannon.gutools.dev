@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#cacaca" >
+
+		<Button
+		    android:id="@+id/view_main_button_mmswma"
+		    android:layout_width="wrap_content"
+		    android:layout_height="48dip"
+		    android:layout_alignParentBottom="true"
+		    android:layout_centerHorizontal="true"
+		    android:layout_marginBottom="22dp"
+		    android:enabled="false"
+		    android:minHeight="48dip"
+		    android:text="@string/button_mmswma"
+		    android:textColor="#fff" />
+
+</RelativeLayout>

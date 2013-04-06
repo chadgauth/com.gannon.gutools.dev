@@ -1,0 +1,77 @@
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/23/trunk/src/com/spoledge/aacplayer
+END
+ArrayAACPlayer.java
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/21/trunk/src/com/spoledge/aacplayer/ArrayAACPlayer.java
+END
+History.java
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/!svn/ver/21/trunk/src/com/spoledge/aacplayer/History.java
+END
+AACPlayer.java
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/!svn/ver/23/trunk/src/com/spoledge/aacplayer/AACPlayer.java
+END
+ArrayPCMFeed.java
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/21/trunk/src/com/spoledge/aacplayer/ArrayPCMFeed.java
+END
+PCMFeed.java
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/!svn/ver/21/trunk/src/com/spoledge/aacplayer/PCMFeed.java
+END
+ArrayDecoder.java
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/21/trunk/src/com/spoledge/aacplayer/ArrayDecoder.java
+END
+Decoder.java
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/!svn/ver/23/trunk/src/com/spoledge/aacplayer/Decoder.java
+END
+MMSInputStream.java
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/23/trunk/src/com/spoledge/aacplayer/MMSInputStream.java
+END
+PlayerCallback.java
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/21/trunk/src/com/spoledge/aacplayer/PlayerCallback.java
+END
+AACFileChunkPlayer.java
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/21/trunk/src/com/spoledge/aacplayer/AACFileChunkPlayer.java
+END
+ArrayBufferReader.java
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/!svn/ver/21/trunk/src/com/spoledge/aacplayer/ArrayBufferReader.java
+END
+AACPlayerActivity.java
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/!svn/ver/23/trunk/src/com/spoledge/aacplayer/AACPlayerActivity.java
+END

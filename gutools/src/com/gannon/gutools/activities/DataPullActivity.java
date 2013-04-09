@@ -1,4 +1,8 @@
 package com.gannon.gutools.activities;
+import java.io.File;
+
+import net.sqlcipher.database.SQLiteDatabase;
+
 import org.holoeverywhere.app.Activity;
 import org.holoeverywhere.widget.ProgressBar;
 import org.holoeverywhere.widget.Toast;
@@ -8,6 +12,7 @@ import com.gannon.gutools.dev.R;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -21,6 +26,7 @@ public class DataPullActivity extends Activity {
 	private ProgressBar pb;
 	private ExtendedWebViewClient eWebViewC;
 	private Handler mHandler = new Handler();
+	private SQLiteDatabase database;
 	//How to output a message:
 	//Toast.makeText(getApplicationContext(), "Message", Toast.LENGTH_LONG).show();
 	private String guXpress = "https://guxpress.gannon.edu/";
@@ -35,7 +41,11 @@ public class DataPullActivity extends Activity {
 		webView.getSettings().setJavaScriptEnabled(true);
 		webView.setVisibility(View.INVISIBLE);
 		pb.setMax(4);
-		navigator = new Navigator(this.getApplicationContext(), webView, pb, getIntent().getStringExtra("username"), getIntent().getStringExtra("password"));
+		Cursor cr = getLogin();
+		cr.moveToFirst();
+		navigator = new Navigator(this.getApplicationContext(), webView, pb, cr.getString(0), cr.getString(1));
+		cr.close();
+		database.close();
 		class MyJavaScriptInterface
 		{
 			@SuppressWarnings("unused")
@@ -87,7 +97,6 @@ public class DataPullActivity extends Activity {
 	        }, 200);
 		}
 		//webView.loadUrl("javascript:document.getElementById('USER_NAME').value=\"gauthier001\"");
-		//webView.loadUrl("javascript:document.getElementById('CURR_PWD').value=\"t3so7sMgnn\"");
         //webView.loadUrl("javascript:document.getElementsByClassName('shortButton')[0].click()");
         //Toast.makeText(this.getApplicationContext(), "Ran: " + count++, Toast.LENGTH_LONG).show();
     }
@@ -106,5 +115,12 @@ public class DataPullActivity extends Activity {
 		super.onResume();
 		webView.onResume();
 	}
+	private Cursor getLogin() {
+        SQLiteDatabase.loadLibs(this);
+        File databaseFile = getDatabasePath("preferences.db");
+        database = SQLiteDatabase.openOrCreateDatabase(databaseFile, "gannon123", null);
+        Cursor cr = database.query("person", null, null, null, null, null, null);
+        return cr;
+    }
 }
     

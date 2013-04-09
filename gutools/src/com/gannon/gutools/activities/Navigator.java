@@ -2,7 +2,6 @@ package com.gannon.gutools.activities;
 
 import org.holoeverywhere.widget.ProgressBar;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.webkit.WebView;

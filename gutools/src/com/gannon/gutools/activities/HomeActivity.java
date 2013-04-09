@@ -48,7 +48,6 @@ public class HomeActivity extends Activity implements OnBackStackChangedListener
     		serviceBinder=null;
     	}
     };
-    
 	public static final String KEY_DISABLE_MUSIC = "disableMusic";
 	private static final String KEY_PAGE = "page";
 	private boolean mCreatedByThemeManager = false;

@@ -58,14 +58,13 @@ public class LoginActivity extends Activity {
 	}
 	private boolean isLoggedIn() {
 		File databaseFile = getDatabasePath("preferences.db");
-		if(databaseFile.exists()){
-			return databaseFile.exists();
+		if(!databaseFile.exists()){
+			return false;
 		}
 		database = SQLiteDatabase.openOrCreateDatabase(databaseFile, "gannon123", null);
         Cursor cr = database.query("person", null, null, null, null, null, null);
         cr.moveToFirst();
-        Boolean result = cr.getString(2).contains("true");
-        Toast.makeText(getApplicationContext(), cr.toString(), Toast.LENGTH_LONG).show();
+        Boolean result = cr.getInt(2)>0;
         cr.close();
         database.close();
         return result;

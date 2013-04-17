@@ -1,16 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fillViewport="true" >
+    android:layout_height="match_parent" >
 
-    <LinearLayout
+    <com.fima.cardsui.views.CardUI
+        android:id="@+id/cardsview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#e3e3e3"
-        android:orientation="vertical" >
+        android:layout_height="match_parent" />
 
-    </LinearLayout>
-
-</ScrollView>
+</RelativeLayout>

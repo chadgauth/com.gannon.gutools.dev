@@ -23,6 +23,12 @@ public class MyCard extends Card {
 		
 		return view;
 	}
+	
+	public void setDesc(Context context, String text){
+		View view = LayoutInflater.from(context).inflate(R.layout.card_ex, null);
+		((TextView) view.findViewById(R.id.description)).setText(text);
+		
+	}
 
 	
 	

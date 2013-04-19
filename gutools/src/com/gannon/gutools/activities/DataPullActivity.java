@@ -1,23 +1,24 @@
 package com.gannon.gutools.activities;
 import java.io.File;
+import java.util.HashMap;
 
 import net.sqlcipher.database.SQLiteDatabase;
 
 import org.holoeverywhere.app.Activity;
 import org.holoeverywhere.widget.ProgressBar;
 import org.holoeverywhere.widget.Toast;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 
 import com.gannon.gutools.dev.R;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 
 public class DataPullActivity extends Activity {
 	final Context context = this;
@@ -30,6 +31,7 @@ public class DataPullActivity extends Activity {
 	//How to output a message:
 	//Toast.makeText(getApplicationContext(), "Message", Toast.LENGTH_LONG).show();
 	private String guXpress = "https://guxpress.gannon.edu/";
+	DBController controller = new DBController(this);
 	
 	
 	@SuppressLint("SetJavaScriptEnabled")
@@ -50,8 +52,35 @@ public class DataPullActivity extends Activity {
 		{
 			@SuppressWarnings("unused")
 			public void processSchedule(String schedule){
-				//This will parse the schedule and send it to this case the Toast display
-				Toast.makeText(getApplicationContext(), schedule, Toast.LENGTH_LONG).show();
+				Document doc = Jsoup.parse(schedule);	
+				HashMap<String, String> queryValues =  new  HashMap<String, String>();
+				Toast.makeText(getApplicationContext(), "0", Toast.LENGTH_LONG).show();
+				//Get number of courses
+				int courseCount = doc.select("span#stuimg").size();
+				Toast.makeText(getApplicationContext(), "1", Toast.LENGTH_LONG).show();
+				String[] courseProf = new String[Integer.valueOf(courseCount)];
+				String[] courseName = new String[Integer.valueOf(courseCount)];
+				String[] courseInfo = new String[Integer.valueOf(courseCount)];
+				String[] courseCred = new String[Integer.valueOf(courseCount)];
+				Toast.makeText(getApplicationContext(), "2", Toast.LENGTH_LONG).show();
+				for(int currCourse = 0; currCourse < courseCount; currCourse++) {
+					queryValues.put("courseProf", courseProf[currCourse] = doc.getElementById("LIST_VAR13_" + Integer.toString(currCourse)).text().toString());
+					controller.insertCourseProf(queryValues);
+					queryValues.put("courseName", courseName[currCourse] = doc.getElementById("LIST_VAR6_" + Integer.toString(currCourse)).text().toString());
+					controller.insertCourseName(queryValues);
+					queryValues.put("courseInfo", courseInfo[currCourse] = doc.getElementById("LIST_VAR12_" + Integer.toString(currCourse)).text().toString());
+					controller.insertCourseInfo(queryValues);
+					queryValues.put("courseCred", courseCred[currCourse] = doc.getElementById("LIST_VAR8_" + Integer.toString(currCourse)).text().toString());
+					controller.insertCourseCred(queryValues);
+					
+					Toast.makeText(getApplicationContext(), courseProf[currCourse-1], Toast.LENGTH_LONG).show();
+				}
+				Toast.makeText(getApplicationContext(), "finished", Toast.LENGTH_LONG).show();
+				controller.close();
+				Toast.makeText(getApplicationContext(), "closed", Toast.LENGTH_LONG).show();
+				navigator.navigate();
+				
+				
 			}
 			@SuppressWarnings("unused")
 		    public void processHTML(String loaded){

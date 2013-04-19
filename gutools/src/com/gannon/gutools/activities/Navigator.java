@@ -46,7 +46,9 @@ public class Navigator {
         	break;
 		case 5:
 			wbv.loadUrl("javascript:window.HTMLOUT.processSchedule(document.getElementsByClassName('envisionWindow')[1].childNodes[4].innerHTML);");
-	    	Intent intent = new Intent(ctx, HomeActivity.class);
+		    break;
+		case 6:
+		  	Intent intent = new Intent(ctx, HomeActivity.class);
 	    	intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		    ctx.startActivity(intent);
 		    break;

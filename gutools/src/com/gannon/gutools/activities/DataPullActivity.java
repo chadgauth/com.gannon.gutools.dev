@@ -32,48 +32,55 @@ public class DataPullActivity extends Activity {
 	//Toast.makeText(getApplicationContext(), "Message", Toast.LENGTH_LONG).show();
 	private String guXpress = "https://guxpress.gannon.edu/";
 	DBController controller = new DBController(this);
-	
+	private CoursesDataSource datasource;
 	
 	@SuppressLint("SetJavaScriptEnabled")
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.layout_webview);
+		//Following code instantiates the database to be ready to add courses
+		datasource = new CoursesDataSource(this.getApplicationContext());
+		datasource.open();
+		
+		//Following deals with the controls that are displayed and hidden on this activity
 		pb = (ProgressBar) findViewById(R.id.loadingBar);
 		webView = (WebView) findViewById(R.id.webView1);
+		
+		//Sets the javascript so GUXpress will work appropriately and hides the webview from user
 		webView.getSettings().setJavaScriptEnabled(true);
 		webView.setVisibility(View.INVISIBLE);
+		
+		//Set max function below sets the progress bar to 4 different states of progress
 		pb.setMax(4);
+		
+		//Gets the login information from the secure database and sends to the navigator class that uses
+		//the username and password to interface with the webview.
 		Cursor cr = getLogin();
 		cr.moveToFirst();
 		navigator = new Navigator(this.getApplicationContext(), webView, pb, cr.getString(0), cr.getString(1));
 		cr.close();
 		database.close();
+		//The above segment destroys the cursor and the database connection immediately to prevent information
+		//being dropped
+		
 		class MyJavaScriptInterface
 		{
 			@SuppressWarnings("unused")
 			public void processSchedule(String schedule){
 				Document doc = Jsoup.parse(schedule);	
-				HashMap<String, String> queryValues =  new  HashMap<String, String>();
-				Toast.makeText(getApplicationContext(), "0", Toast.LENGTH_LONG).show();
 				//Get number of courses
 				int courseCount = doc.select("span#stuimg").size();
-				Toast.makeText(getApplicationContext(), "1", Toast.LENGTH_LONG).show();
-				String[] courseProf = new String[Integer.valueOf(courseCount)];
-				String[] courseName = new String[Integer.valueOf(courseCount)];
-				String[] courseInfo = new String[Integer.valueOf(courseCount)];
-				String[] courseCred = new String[Integer.valueOf(courseCount)];
-				Toast.makeText(getApplicationContext(), "2", Toast.LENGTH_LONG).show();
-				for(int currCourse = 0; currCourse < courseCount; currCourse++) {
-					queryValues.put("courseProf", courseProf[currCourse] = doc.getElementById("LIST_VAR13_" + Integer.toString(currCourse)).text().toString());
-					controller.insertCourseProf(queryValues);
-					queryValues.put("courseName", courseName[currCourse] = doc.getElementById("LIST_VAR6_" + Integer.toString(currCourse)).text().toString());
-					controller.insertCourseName(queryValues);
-					queryValues.put("courseInfo", courseInfo[currCourse] = doc.getElementById("LIST_VAR12_" + Integer.toString(currCourse)).text().toString());
-					controller.insertCourseInfo(queryValues);
-					queryValues.put("courseCred", courseCred[currCourse] = doc.getElementById("LIST_VAR8_" + Integer.toString(currCourse)).text().toString());
-					controller.insertCourseCred(queryValues);
-					
-					Toast.makeText(getApplicationContext(), courseProf[currCourse-1], Toast.LENGTH_LONG).show();
+				//String[] courseProf = new String[Integer.valueOf(courseCount)];
+				//String[] courseName = new String[Integer.valueOf(courseCount)];
+				//String[] courseInfo = new String[Integer.valueOf(courseCount)];
+				//String[] courseCred = new String[Integer.valueOf(courseCount)];
+				Toast.makeText(getApplicationContext(), "reached", Toast.LENGTH_LONG).show();
+				Toast.makeText(getApplicationContext(), String.valueOf(courseCount), Toast.LENGTH_LONG).show();
+				for(int currCourse = 1; currCourse <= courseCount; currCourse++) {
+					datasource.createCourse(doc.getElementById("LIST_VAR6_" + Integer.toString(currCourse)).text().toString(), 
+							doc.getElementById("LIST_VAR12_" + Integer.toString(currCourse)).text().toString(), 
+							doc.getElementById("LIST_VAR13_" + Integer.toString(currCourse)).text().toString(), 
+							doc.getElementById("LIST_VAR8_" + Integer.toString(currCourse)).text().toString());					
 				}
 				Toast.makeText(getApplicationContext(), "finished", Toast.LENGTH_LONG).show();
 				controller.close();
@@ -133,16 +140,19 @@ public class DataPullActivity extends Activity {
 	protected void onDestroy() {
 	    super.onDestroy();
 	    webView.destroy();
+	    datasource.close();
 	}
 	@Override
 	protected void onPause() {
 		super.onPause();
 		webView.onPause();
+	    datasource.close();
 	}
 	@Override
 	protected void onResume() {
 		super.onResume();
 		webView.onResume();
+		datasource.open();
 	}
 	private Cursor getLogin() {
         SQLiteDatabase.loadLibs(this);

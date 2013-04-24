@@ -8,27 +8,46 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 public class DBController extends SQLiteOpenHelper {
 	/*
 	 * Constructor: Create database named 'Schedule.db'
 	 */
-	public DBController(Context applicationcontext) {
-        super(applicationcontext, "Schedule.db", null, 1);
-    }
+	public static final String TABLE_COURSES = "courses";
+	public static final String COLUMN_ID = "_id";
+	public static final String COLUMN_NAME = "name";
+	public static final String COLUMN_PROFESSOR = "professor";
+	public static final String COLUMN_INFO = "info";
+	public static final String COLUMN_CREDIT = "credit";
+	
+	private static final String DATABASE_NAME = "courses.db";
+	private static final int DATABASE_VERSION = 1;
+		  // Database creation sql statement
+	private static final String DATABASE_CREATE = "create table "
+	    + TABLE_COURSES + "(" + COLUMN_ID
+	    + " integer primary key autoincrement, " + COLUMN_NAME
+	    + " text not null, " + COLUMN_PROFESSOR
+	    + " text not null, " + COLUMN_INFO
+	    + " text not null, " + COLUMN_CREDIT
+	    + " text not null);";
+	
+	public DBController(Context context) {
+	  super(context, DATABASE_NAME, null, DATABASE_VERSION);
+	}
 	
 	@Override
 	public void onCreate(SQLiteDatabase database) {
-		String query;
-		query = "CREATE TABLE courses ( courseId INTEGER PRIMARY KEY, courseProf TEXT, courseName TEXT, courseInfo TEXT, courseCred TEXT )";
-        database.execSQL(query);
+	  database.execSQL(DATABASE_CREATE);
 	}
+	
 	@Override
-	public void onUpgrade(SQLiteDatabase database, int version_old, int current_version) {
-		String query;
-		query = "DROP TABLE IF EXISTS courses";
-		database.execSQL(query);
-        onCreate(database);
+	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+	  Log.w(DBController.class.getName(),
+	      "Upgrading database from version " + oldVersion + " to "
+	          + newVersion + ", which will destroy all old data");
+	  db.execSQL("DROP TABLE IF EXISTS " + TABLE_COURSES);
+	  onCreate(db);
 	}
 	
 	

@@ -1,18 +1,14 @@
 package com.gannon.gutools.fragments;
 
-import java.io.File;
 import java.util.List;
 
 import org.holoeverywhere.LayoutInflater;
 import org.holoeverywhere.app.Fragment;
 
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.fima.cardsui.objects.Card;
 import com.fima.cardsui.views.CardUI;
 import com.gannon.gutools.activities.Course;
 import com.gannon.gutools.activities.CoursesDataSource;
@@ -26,7 +22,7 @@ public class ClassFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View V = inflater.inflate(R.layout.events);
 		mCardView = (CardUI) V.findViewById(R.id.cardsview);
-		mCardView.setSwipeable(false);
+		mCardView.setSwipeable(true);
 		datasource = new CoursesDataSource(this.getActivity());
 		datasource.open();
 		List<Course> courses = datasource.getAllCourses();

@@ -1,5 +1,7 @@
 package com.gannon.gutools.activities;
 
+import java.io.File;
+
 import org.holoeverywhere.ThemeManager;
 
 import com.gannon.gutools.dev.R;
@@ -17,6 +19,7 @@ import android.os.IBinder;
 import android.support.v4.app.FragmentManager.OnBackStackChangedListener;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
+import android.widget.Toast;
 
 import org.holoeverywhere.addon.AddonSlidingMenu;
 import org.holoeverywhere.addon.AddonSlidingMenu.AddonSlidingMenuA;
@@ -25,12 +28,13 @@ import org.holoeverywhere.app.Fragment;
 import org.holoeverywhere.app.Activity.Addons;
 
 import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.slidingmenu.lib.SlidingMenu;
  
 @Addons(Activity.ADDON_SLIDING_MENU)
-public class HomeActivity extends Activity implements OnBackStackChangedListener  {
- 
+public class HomeActivity extends Activity implements OnBackStackChangedListener {
+	private int backpress;
 	public static interface OnMenuClickListener {
 	    public void onMenuClick(int position);
 	}
@@ -38,7 +42,14 @@ public class HomeActivity extends Activity implements OnBackStackChangedListener
 	public StreamService serviceBinder;
 	IntentFilter intentFilter;
 	Intent i;
-	    
+	public static final String KEY_DISABLE_MUSIC = "disableMusic";
+	private static final String KEY_PAGE = "page";
+	private boolean mCreatedByThemeManager = false;
+	private int mCurrentPage = -1;
+	public boolean mIsPlaying = false;
+	private Handler mHandler;
+	private boolean mStaticSlidingMenu;
+	
 	private ServiceConnection connection = new ServiceConnection(){
     	public void onServiceConnected(ComponentName className, IBinder service){
     		serviceBinder = ((StreamService.MyBinder)service).getService();
@@ -48,13 +59,6 @@ public class HomeActivity extends Activity implements OnBackStackChangedListener
     		serviceBinder=null;
     	}
     };
-	public static final String KEY_DISABLE_MUSIC = "disableMusic";
-	private static final String KEY_PAGE = "page";
-	private boolean mCreatedByThemeManager = false;
-	private int mCurrentPage = -1;
-	public boolean mIsPlaying = false;
-	private Handler mHandler;
-	private boolean mStaticSlidingMenu;
 	
 	public void startService() {
         i = new Intent(HomeActivity.this, StreamService.class);
@@ -82,10 +86,22 @@ public class HomeActivity extends Activity implements OnBackStackChangedListener
 	@Override
 	@SuppressLint("NewApi")
 	public void onBackPressed() {
-	    if (!getSupportFragmentManager().popBackStackImmediate()) {
-	        stopService();
+	   // if (!getSupportFragmentManager().popBackStackImmediate()) {
+	   //     stopService();
+	  //      finish();
+	  //  }
+	    backpress = (backpress + 1);
+
+	    if (backpress>1) {
+	    	Intent startMain = new Intent(Intent.ACTION_MAIN);
+	        startMain.addCategory(Intent.CATEGORY_HOME);
+	        startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+	        startActivity(startMain);
 	        finish();
 	    }
+	    else
+	    	Toast.makeText(getApplicationContext(), " Press Back again to Exit ", Toast.LENGTH_SHORT).show();
+
 	}
 
 	@Override
@@ -100,9 +116,11 @@ public class HomeActivity extends Activity implements OnBackStackChangedListener
 	public void onCreate(Bundle savedInstanceState) {
 	    // This line restore instance state when we are change theme and
 	    // activity restarts
+		startService();
 	    savedInstanceState = instanceState(savedInstanceState);
 	    super.onCreate(savedInstanceState);
 	
+	    backpress=0;
 	    mCreatedByThemeManager = getIntent().getBooleanExtra(
 	            ThemeManager.KEY_CREATED_BY_THEME_MANAGER, false);
 	    if (mCreatedByThemeManager) {
@@ -152,7 +170,19 @@ public class HomeActivity extends Activity implements OnBackStackChangedListener
 	    stopService();
 	    super.onDestroy();
 	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getSupportMenuInflater().inflate(R.menu.menu, menu);
+        return super.onCreateOptionsMenu(menu);
+		}
 
+//	public boolean onOptionsItemSelected(MenuItem item) {
+        //This uses the imported MenuItem from ActionBarSherlock
+ //       Toast.makeText(this, "Got click: " + item.toString(), Toast.LENGTH_SHORT).show();
+//        return true;
+ //   }
+	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {
@@ -164,6 +194,17 @@ public class HomeActivity extends Activity implements OnBackStackChangedListener
 	                onBackPressed();
 	            }
 	            break;
+	        case R.id.logout:
+	        	//Toast.makeText(this.getApplicationContext(), "Logout Pressed", Toast.LENGTH_LONG).show();
+	        	File file = getDatabasePath("courses.db");
+	        	if(file.exists())
+	        	  file.delete();
+	        	file = getDatabasePath("preferences.db");
+	        	if(file.exists())
+		        	  file.delete();
+	        	Intent intent = new Intent(this.getApplicationContext(), LoginActivity.class);
+			    startActivity(intent);
+	        	break;
 	        default:
 	            return super.onOptionsItemSelected(item);
 	    }
@@ -205,8 +246,20 @@ public class HomeActivity extends Activity implements OnBackStackChangedListener
 	}
 
 	public void replaceFragment(Fragment fragment) {
-	    replaceFragment(fragment, null);
+		ActionBar ab = getSupportActionBar();
+		if(fragment instanceof WERGFragment)
+			ab.setTitle("WERG Stream");
+		else if(fragment instanceof EventFragment)
+			ab.setTitle("Events");
+		else if(fragment instanceof ClassFragment)
+			ab.setTitle("Classes");
+		else if(fragment instanceof AssignmentFragment)
+			ab.setTitle("Assignments");
+		else
+			ab.setTitle("Home");
+		replaceFragment(fragment, null);
 	    addonSlidingMenu().showContent();
+	    
 	}
 
 	public void replaceFragment(Fragment fragment,

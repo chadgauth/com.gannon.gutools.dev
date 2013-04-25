@@ -74,17 +74,17 @@ public class DataPullActivity extends Activity {
 				//String[] courseName = new String[Integer.valueOf(courseCount)];
 				//String[] courseInfo = new String[Integer.valueOf(courseCount)];
 				//String[] courseCred = new String[Integer.valueOf(courseCount)];
-				Toast.makeText(getApplicationContext(), "reached", Toast.LENGTH_LONG).show();
-				Toast.makeText(getApplicationContext(), String.valueOf(courseCount), Toast.LENGTH_LONG).show();
+				//Toast.makeText(getApplicationContext(), "reached", Toast.LENGTH_LONG).show();
+				//Toast.makeText(getApplicationContext(), String.valueOf(courseCount), Toast.LENGTH_LONG).show();
 				for(int currCourse = 1; currCourse <= courseCount; currCourse++) {
 					datasource.createCourse(doc.getElementById("LIST_VAR6_" + Integer.toString(currCourse)).text().toString(), 
 							doc.getElementById("LIST_VAR12_" + Integer.toString(currCourse)).text().toString(), 
 							doc.getElementById("LIST_VAR13_" + Integer.toString(currCourse)).text().toString(), 
 							doc.getElementById("LIST_VAR8_" + Integer.toString(currCourse)).text().toString());					
 				}
-				Toast.makeText(getApplicationContext(), "finished", Toast.LENGTH_LONG).show();
+				//Toast.makeText(getApplicationContext(), "finished", Toast.LENGTH_LONG).show();
 				controller.close();
-				Toast.makeText(getApplicationContext(), "closed", Toast.LENGTH_LONG).show();
+				//Toast.makeText(getApplicationContext(), "closed", Toast.LENGTH_LONG).show();
 				navigator.navigate();
 				
 				
@@ -120,6 +120,9 @@ public class DataPullActivity extends Activity {
         }, 200);
 
 }
+	public void onBackPressed() {
+		Toast.makeText(getApplicationContext(), " Application Loading... ", Toast.LENGTH_SHORT).show();
+	}
 	private void login() {
 		if (eWebViewC.isLoaded()){
 			webView.loadUrl("javascript:function isLoaded(){ if(document.getElementsByClassName('label')[2].innerHTML=\"Log In \"){ return \"true\";}else{return \"false\";}};");

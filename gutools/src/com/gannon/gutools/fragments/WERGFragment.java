@@ -7,10 +7,10 @@ import android.view.ViewGroup;
 import org.holoeverywhere.app.Fragment;
 import org.holoeverywhere.widget.Button;
 
+import com.gannon.gutools.activities.HomeActivity;
 import com.gannon.gutools.dev.R;
 
 import org.holoeverywhere.LayoutInflater;
-import com.gannon.gutools.activities.HomeActivity;
 
 public class WERGFragment extends Fragment implements View.OnClickListener{
     private Button btnMMSWMA;    
@@ -41,11 +41,11 @@ public class WERGFragment extends Fragment implements View.OnClickListener{
 	public void onClick(View v) {
     	if (!ha.mIsPlaying){
     		btnMMSWMA.setText(R.string.text_playing);
-    		ha.startService();
+    		ha.serviceBinder.startStream();
     		ha.mIsPlaying=true;
     	}else{
     		btnMMSWMA.setText(R.string.button_mmswma);
-    		ha.stopService();
+    		ha.serviceBinder.stopStream();
     		ha.mIsPlaying=false;
     	}
 	}

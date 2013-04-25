@@ -5,20 +5,20 @@ import com.spoledge.aacplayer.AACPlayer;
 import com.spoledge.aacplayer.ArrayAACPlayer;
 import com.spoledge.aacplayer.ArrayDecoder;
 import com.spoledge.aacplayer.Decoder;
+
 import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
-
 public class StreamService extends Service implements com.spoledge.aacplayer.PlayerCallback {
 
 	private final IBinder binder = new MyBinder();
-    static AACPlayer aacPlayer;
+    AACPlayer aacPlayer;
     boolean playerStarted=false;
     int progress;
 	
     public class MyBinder extends Binder {
-        public StreamService getService() {
+        StreamService getService() {
             return StreamService.this;
         }
     }
@@ -48,7 +48,7 @@ public class StreamService extends Service implements com.spoledge.aacplayer.Pla
         aacPlayer.playAsync(getString(R.string.live_stream));
 	}
 	
-	private static void stop() {
+	private void stop() {
 		if (aacPlayer != null) { aacPlayer.stop(); aacPlayer = null; }
 	}
 	

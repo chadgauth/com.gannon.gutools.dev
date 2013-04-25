@@ -55,7 +55,7 @@ public class NavigationFragment extends ListFragment {
 	private void switchFragment(Fragment fragment) {
 		if (getActivity() == null)
 			return;
-
+		
 		if (getActivity() instanceof HomeActivity) {
 			HomeActivity ha = (HomeActivity) getActivity();
 			ha.replaceFragment(fragment);

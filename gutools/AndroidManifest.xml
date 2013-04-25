@@ -20,6 +20,7 @@
        
         <activity
             android:name="com.gannon.gutools.activities.LoginActivity"
+            android:noHistory="true"
             android:label="@string/title_activity_main" android:theme="@style/Holo.Theme.NoActionBar"
             android:screenOrientation="portrait">
                         <intent-filter>
@@ -30,15 +31,19 @@
         </activity>
         <activity
             android:name="com.gannon.gutools.activities.DataPullActivity"
+            android:noHistory="true"
+            android:theme="@style/Holo.Theme.NoActionBar"
             android:label="@string/title_activity_web_view"
             android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.gannon.gutools.activities.HomeActivity"
+            android:noHistory="true"
             android:label="@string/title_activity_web_view" 
             android:screenOrientation="portrait">
 
         </activity>
+        <service android:name="com.gannon.gutools.activities.StreamService"></service>
     </application>
 
 </manifest>

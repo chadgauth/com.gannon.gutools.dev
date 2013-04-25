@@ -25,8 +25,9 @@ public class LoginActivity extends Activity {
 	private EditText ur;
 	private EditText ps;
 	private Handler mHandler = new Handler();
- 
+	private int backpress;
 	public void onCreate(Bundle savedInstanceState) {
+		backpress=0;
 		final Context context = this;
 		SQLiteDatabase.loadLibs(this);
 		super.onCreate(savedInstanceState);
@@ -56,6 +57,26 @@ public class LoginActivity extends Activity {
 			});
 		}
 	}
+	public void onBackPressed() {
+		   // if (!getSupportFragmentManager().popBackStackImmediate()) {
+		   //     stopService();
+		  //      finish();
+		  //  }
+		    backpress = (backpress + 1);
+		    
+
+
+		    if (backpress>1) {
+		    	Intent startMain = new Intent(Intent.ACTION_MAIN);
+		        startMain.addCategory(Intent.CATEGORY_HOME);
+		        startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		        startActivity(startMain);
+		        this.finish();
+		    }
+		    else
+		    	Toast.makeText(getApplicationContext(), " Press Back again to Exit ", Toast.LENGTH_SHORT).show();
+
+		}
 	private boolean isLoggedIn() {
 		File databaseFile = getDatabasePath("preferences.db");
 		if(!databaseFile.exists()){

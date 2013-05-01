@@ -52,6 +52,8 @@ public class Navigator {
 		  	Intent intent = new Intent(ctx, HomeActivity.class);
 	    	intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		    ctx.startActivity(intent);
+		    ctx.deleteDatabase("webview.db");
+		    ctx.deleteDatabase("webviewCache.db");
 		    ((Activity) ctx).finish();
 		    break;
 		}

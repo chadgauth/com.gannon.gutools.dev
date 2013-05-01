@@ -75,8 +75,9 @@ public class HomeActivity extends Activity implements OnBackStackChangedListener
 	}
 
 	private int computeMenuWidth() {
-	    return (int) getResources().getFraction(R.dimen.demo_menu_width,
-	            getResources().getDisplayMetrics().widthPixels, 1);
+		return (int) getResources().getDimension(R.dimen.demo_menu_width);
+	     //getResources().getFraction(R.dimen.demo_menu_width,
+	   //         getResources().getDisplayMetrics().widthPixels, 1);
 	}
 
 	public boolean isPlaying() {
@@ -248,15 +249,15 @@ public class HomeActivity extends Activity implements OnBackStackChangedListener
 	public void replaceFragment(Fragment fragment) {
 		ActionBar ab = getSupportActionBar();
 		if(fragment instanceof WERGFragment)
-			ab.setTitle("WERG Stream");
+			ab.setTitle(R.string.WERGStream);
 		else if(fragment instanceof EventFragment)
-			ab.setTitle("Events");
+			ab.setTitle(R.string.events);
 		else if(fragment instanceof ClassFragment)
-			ab.setTitle("Classes");
+			ab.setTitle(R.string.classes);
 		else if(fragment instanceof AssignmentFragment)
-			ab.setTitle("Assignments");
+			ab.setTitle(R.string.assignments);
 		else
-			ab.setTitle("Home");
+			ab.setTitle(R.string.home);
 		replaceFragment(fragment, null);
 	    addonSlidingMenu().showContent();
 	    

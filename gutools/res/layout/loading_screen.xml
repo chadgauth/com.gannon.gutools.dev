@@ -4,7 +4,8 @@
 	    android:layout_height="fill_parent"
 	    android:background="@drawable/login_background"
 	    android:gravity="center_vertical|center_horizontal|center"
-	    android:orientation="vertical" >
+	    android:orientation="vertical" 
+	    android:animateLayoutChanges="true">
 
 	    <ImageView
 	        android:id="@+id/imageView1"
@@ -17,8 +18,8 @@
 	<WebView
 	    android:id="@+id/webView1"
 	    android:layout_width="fill_parent"
-	    android:layout_height="fill_parent"
-	    android:visibility="gone" />
+	    android:layout_height="5dp"
+	    android:visibility="invisible" />
 
 	<ProgressBar
 	    android:id="@+id/loadingBar"

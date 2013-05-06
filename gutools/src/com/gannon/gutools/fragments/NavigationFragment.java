@@ -39,7 +39,7 @@ public class NavigationFragment extends ListFragment {
 			newContent = new EventFragment();
 			break;
 		case 2:
-			newContent = new ClassFragment();
+			newContent = new ScheduleFragment();
 			break;
 		case 3:
 			newContent = new AssignmentFragment();

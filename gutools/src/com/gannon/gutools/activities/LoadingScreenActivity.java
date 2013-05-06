@@ -1,6 +1,5 @@
 package com.gannon.gutools.activities;
 import java.io.File;
-import java.util.HashMap;
 
 import net.sqlcipher.database.SQLiteDatabase;
 
@@ -17,6 +16,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
 
@@ -39,30 +39,32 @@ public class LoadingScreenActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.loading_screen);
 		//Following code instantiates the database to be ready to add courses
-		datasource = new CoursesDataSource(this.getApplicationContext());
+		datasource = new CoursesDataSource(context.getApplicationContext());
 		datasource.open();
 		
 		//Following deals with the controls that are displayed and hidden on this activity
 		pb = (ProgressBar) findViewById(R.id.loadingBar);
+		pb.setVisibility(View.GONE);
 		webView = (WebView) findViewById(R.id.webView1);
 		
 		//Sets the javascript so GUXpress will work appropriately and hides the webview from user
 		webView.getSettings().setJavaScriptEnabled(true);
-		webView.setVisibility(View.INVISIBLE);
 		
 		//Set max function below sets the progress bar to 4 different states of progress
 		pb.setMax(4);
 		
 		//Gets the login information from the secure database and sends to the navigator class that uses
 		//the username and password to interface with the webview.
-		Cursor cr = getLogin();
+		Cursor cr = getLogin(context);
 		cr.moveToFirst();
-		navigator = new Navigator(this.getApplicationContext(), webView, pb, cr.getString(0), cr.getString(1));
+		navigator = new Navigator(context.getApplicationContext(), webView, pb, cr.getString(0), cr.getString(1));
 		cr.close();
 		database.close();
 		//The above segment destroys the cursor and the database connection immediately to prevent information
 		//being dropped
 		
+		//The MyJavaScriptInterface completely handles the XSS injection that is used to parse data from a web
+		//view. The below code is run when DOM triggers the HTMLOUT javascript code.
 		class MyJavaScriptInterface
 		{
 			@SuppressWarnings("unused")
@@ -70,16 +72,18 @@ public class LoadingScreenActivity extends Activity {
 				Document doc = Jsoup.parse(schedule);	
 				int courseCount = doc.select("span#stuimg").size();
 				String name;
+				String mInfo;
 				String info;
 				String prof;
 				String cred;
+				String time;
 				for(int currCourse = 1; currCourse <= courseCount; currCourse++) {
 					name = doc.getElementById("LIST_VAR6_" + Integer.toString(currCourse)).text().toString();
 					info = doc.getElementById("LIST_VAR12_" + Integer.toString(currCourse)).text().toString();
 					prof = doc.getElementById("LIST_VAR13_" + Integer.toString(currCourse)).text().toString();
 					cred = doc.getElementById("LIST_VAR8_" + Integer.toString(currCourse)).text().toString();
 					name = name.substring(name.indexOf(") ") + 1).trim();
-					info = info.substring(info.indexOf("Lecture") + "Lecture".length()).trim();
+					mInfo = info.replaceAll("Lecture ", "").trim();
 					if(!name.contains("Science"))
 						name = name.replaceAll("Scienc", "Science");
 					if(!name.contains("Business"))
@@ -89,13 +93,35 @@ public class LoadingScreenActivity extends Activity {
 					name = name.replaceFirst("HC-", "Honors ");
 					if(!name.contains("Culture"))
 						name = name.replaceAll("Cult", "Culture");
-					datasource.createCourse(name, info, prof, cred);
+					mInfo = mInfo.replaceAll("Monday", "");
+					mInfo = mInfo.replaceAll("Tuesday", "");
+					mInfo = mInfo.replaceAll("Wednesday", "");
+					mInfo = mInfo.replaceAll("Thursday", "");
+					mInfo = mInfo.replaceAll("Friday", "");
+					mInfo = mInfo.replaceAll(" - ", "-");
+					mInfo = mInfo.replaceAll("[0-9][0-9].[0-9][0-9].[0-9][0-9][0-9]" +
+							"[0-9]-[0-9][0-9].[0-9][0-9]." +
+							"[0-9][0-9][0-9][0-9]", "");
+					mInfo = mInfo.replaceAll(",", "");
+					mInfo = mInfo.trim();
+					mInfo = mInfo.replaceAll("  ", "\n");
+					time="";
+					while (mInfo.contains("-")){
+						time = time + mInfo.substring(mInfo.indexOf("-")-7, mInfo.indexOf("-")+8);
+						mInfo = mInfo.replaceFirst("..:....-..:....", "");
+						time = time +"\n";
+					}
+					time.replaceAll("^0", "");
+					time.replaceAll(":0", ":");
+					mInfo = mInfo.trim();
+					
+					datasource.createCourse(name, mInfo, prof, cred, time, (info.contains("Monday"))?1:0,
+							(info.contains("Tuesday"))?1:0, (info.contains("Wednesday"))?1:0,
+							(info.contains("Thursday"))?1:0, (info.contains("Friday"))?1:0);
 			
 				}
 				controller.close();
 				navigator.navigate();
-				
-				
 			}
 			@SuppressWarnings("unused")
 		    public void processHTML(String loaded){
@@ -104,6 +130,8 @@ public class LoadingScreenActivity extends Activity {
 		    		 pb.setProgress(1);
 			    	 webView.loadUrl("https://guxpress.gannon.edu/GUXpress/colleague?TOKENIDX=5787208423&SS=LGRQ");
 			    	 navigator.navigate();
+		    	 }else{
+		    		 login();
 		    	 }
 			}
 		}
@@ -113,6 +141,11 @@ public class LoadingScreenActivity extends Activity {
 		eWebViewC.setUrl("https://guxpress.gannon.edu/GUXpress/colleague?TYPE=M&PID=CORE-WBMAIN&TOKENIDX=");
 		webView.setWebViewClient(eWebViewC);
 		webView.loadUrl(guXpress);
+		mHandler.postDelayed(new Runnable(){
+			public void run(){
+				pb.setVisibility(View.VISIBLE);
+			}
+		}, 200);
 		mHandler.postDelayed(new Runnable() {
             public void run() {
             	login();
@@ -153,10 +186,11 @@ public class LoadingScreenActivity extends Activity {
 		webView.onResume();
 		datasource.open();
 	}
-	private Cursor getLogin() {
+	private Cursor getLogin(Context context) {
         SQLiteDatabase.loadLibs(this);
         File databaseFile = getDatabasePath("preferences.db");
-        database = SQLiteDatabase.openOrCreateDatabase(databaseFile, "gannon123", null);
+        DeviceUuidFactory uuid = new DeviceUuidFactory(context.getApplicationContext());
+        database = SQLiteDatabase.openOrCreateDatabase(databaseFile, "gannon" + uuid.getDeviceUuid().toString(), null);
         Cursor cr = database.query("person", null, null, null, null, null, null);
         return cr;
     }

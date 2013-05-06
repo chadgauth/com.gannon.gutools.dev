@@ -252,7 +252,7 @@ public class HomeActivity extends Activity implements OnBackStackChangedListener
 			ab.setTitle(R.string.WERGStream);
 		else if(fragment instanceof EventFragment)
 			ab.setTitle(R.string.events);
-		else if(fragment instanceof ClassFragment)
+		else if(fragment instanceof ScheduleFragment)
 			ab.setTitle(R.string.classes);
 		else if(fragment instanceof AssignmentFragment)
 			ab.setTitle(R.string.assignments);

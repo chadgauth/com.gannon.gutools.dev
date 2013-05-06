@@ -27,9 +27,15 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.StrictMode;
+import android.text.Editable;
+import android.text.InputFilter;
+import android.text.Spanned;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
+
 import org.holoeverywhere.widget.EditText;
 import org.holoeverywhere.app.Activity;
 
@@ -40,10 +46,11 @@ public class LoginActivity extends Activity {
 	private Button button;
 	private EditText ur;
 	private EditText ps;
-	private Handler mHandler = new Handler();
 	private int backpress;
+	private boolean mVisible;
+	TextWatcher tt = null;
 	public void onCreate(Bundle savedInstanceState) {
-		
+		mVisible=true;
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 		StrictMode.setThreadPolicy(policy);
 		
@@ -54,6 +61,22 @@ public class LoginActivity extends Activity {
 		setContentView(R.layout.login_screen);
 		button = (Button) findViewById(R.id.button1);
 		ur = (EditText)findViewById(R.id.editText1);
+		tt = new TextWatcher() {
+	           public void afterTextChanged(Editable s){
+	                ur.setSelection(s.length());
+	           }
+	           public void beforeTextChanged(CharSequence s,int start,int count, int after){} 
+	           public void onTextChanged(CharSequence s, int start, int before, int count) {
+	               ur.removeTextChangedListener(tt);
+	               if(ur.getText().toString().contains("@")){
+		               Toast.makeText(getApplicationContext(), "We only need your username. Ex: smith001", Toast.LENGTH_SHORT).show();
+		               ps.requestFocus();
+	               }    
+		           ur.setText(ur.getText().toString().replace("@", " "));
+	               ur.addTextChangedListener(tt);	      
+	           }
+	       };
+	       ur.addTextChangedListener(tt);
 		ps = (EditText)findViewById(R.id.editText2);
 		button.setVisibility(View.INVISIBLE);
 		ur.setVisibility(View.INVISIBLE);
@@ -71,15 +94,26 @@ public class LoginActivity extends Activity {
 			  public void onClick(View arg0) {
 				  postLoginData();		
 				  toggleInputs();
+				  InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+				  imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
 			  }
 	 
 			});
 		}
 	}
 	public void toggleInputs(){
-		button.setEnabled(!button.isEnabled());
-		ur.setEnabled(!ur.isEnabled());
-		ps.setEnabled(!ps.isEnabled());
+		if(mVisible){
+			button.setVisibility(View.GONE);
+			ur.setVisibility(View.GONE);
+			ps.setVisibility(View.GONE);
+		} 
+		else{
+			button.setVisibility(View.VISIBLE);
+			ur.setVisibility(View.VISIBLE);
+			ps.setVisibility(View.VISIBLE);
+		}
+		mVisible = !mVisible;
+		
 	}
 	public void onBackPressed() {
 		   // if (!getSupportFragmentManager().popBackStackImmediate()) {
@@ -106,7 +140,8 @@ public class LoginActivity extends Activity {
 		if(!databaseFile.exists()){
 			return false;
 		}
-		database = SQLiteDatabase.openOrCreateDatabase(databaseFile, "gannon123", null);
+		DeviceUuidFactory uuid = new DeviceUuidFactory(this.getApplicationContext());
+        database = SQLiteDatabase.openOrCreateDatabase(databaseFile, "gannon" + uuid.getDeviceUuid().toString(), null);
         Cursor cr = database.query("person", null, null, null, null, null, null);
         cr.moveToFirst();
         Boolean result = cr.getInt(2)>0;
@@ -119,10 +154,11 @@ public class LoginActivity extends Activity {
         File databaseFile = getDatabasePath("preferences.db");
         databaseFile.mkdirs();
         databaseFile.delete();
-        database = SQLiteDatabase.openOrCreateDatabase(databaseFile, "gannon123", null);
+        DeviceUuidFactory uuid = new DeviceUuidFactory(this.getApplicationContext());
+        database = SQLiteDatabase.openOrCreateDatabase(databaseFile, "gannon" + uuid.getDeviceUuid().toString(), null);
         database.execSQL("create table person(user, pass, log)");
-        database.execSQL("insert into person(user, pass, log) values(?, ?, ?)", new Object[]{ur.getText().toString(),
-        		ps.getText().toString(), true});
+        database.execSQL("insert into person(user, pass, log) values(?, ?, ?)", new Object[]{ur.getText().toString().trim(),
+        		ps.getText().toString().trim(), true});
         database.close();
     }
 	@Override
@@ -167,9 +203,16 @@ public class LoginActivity extends Activity {
             }else
             {
             	InitializeSQLCipher();
-			    Intent intent = new Intent(getApplicationContext(), LoadingScreenActivity.class);
-			    startActivity(intent);
-			    overridePendingTransition(R.anim.fade_in, 0);
+            	Handler mHandler = new Handler();
+            	mHandler.postDelayed(new Runnable(){
+					@Override
+					public void run() {
+						Intent intent = new Intent(getApplicationContext(), LoadingScreenActivity.class);
+					    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+					    startActivity(intent);
+					}
+            	}, 2000);
+			    
             }
 
         } catch (ClientProtocolException e) {

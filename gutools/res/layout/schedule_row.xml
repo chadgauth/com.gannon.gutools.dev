@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="5dip" >
+ 
+    <!--  ListRow Left sied Thumbnail image -->
+    <LinearLayout android:id="@+id/thumbnail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="3dip"
+        android:layout_alignParentLeft="true"
+        android:layout_marginRight="5dip">
+ 
+    </LinearLayout>
+ 
+    <!-- Title Of Song-->
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/thumbnail"
+        android:layout_toLeftOf="@+id/monday"
+        android:layout_toRightOf="@+id/thumbnail"
+        android:text="Course"
+        android:textColor="#040404"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:typeface="sans" />
+     
+    <!-- Artist Name -->
+
+    <TextView
+        android:id="@+id/info"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/name"
+        android:layout_marginTop="1dip"
+        android:layout_toLeftOf="@+id/time"
+        android:layout_toRightOf="@+id/thumbnail"
+        android:text="Info"
+        android:textColor="#343434"
+        android:textSize="12sp" />
+    
+    <TextView
+        android:id="@+id/prof"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/info"
+        android:layout_marginTop="1dip"
+        android:layout_marginRight="8dip"
+        android:layout_toRightOf="@+id/thumbnail"
+        android:text="professor"
+        android:textColor="#343434"
+        android:textSize="12sp" />
+ 
+    <!-- Rightend Duration -->
+
+        <TextView
+            android:id="@+id/friday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/name"
+            android:layout_alignBottom="@+id/name"
+            android:layout_alignRight="@+id/prof"
+            android:gravity="right"
+            android:text="F"
+            android:textColor="#ACACAC"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/thursday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/friday"
+            android:layout_alignBottom="@+id/friday"
+            android:layout_marginRight="3dp"
+            android:layout_toLeftOf="@+id/friday"
+            android:gravity="right"
+            android:text="TH"
+            android:textColor="#ACACAC"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+        
+        <TextView
+            android:id="@+id/wednesday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/thursday"
+            android:layout_alignBottom="@+id/thursday"
+            android:layout_marginRight="3dp"
+            android:layout_toLeftOf="@+id/thursday"
+            android:gravity="right"
+            android:text="W"
+            android:textColor="#ACACAC"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+        
+                <TextView
+            android:id="@+id/tuesday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/wednesday"
+            android:layout_alignBottom="@+id/wednesday"
+            android:layout_marginRight="3dp"
+            android:layout_toLeftOf="@+id/wednesday"
+            android:gravity="right"
+            android:text="T"
+            android:textColor="#ACACAC"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+                
+                                <TextView
+            android:id="@+id/monday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/tuesday"
+            android:layout_alignBottom="@+id/tuesday"
+            android:layout_marginRight="3dp"
+            android:layout_toLeftOf="@+id/tuesday"
+            android:gravity="right"
+            android:text="M"
+            android:textColor="#ACACAC"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/time"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    
+                                    android:layout_alignBaseline="@+id/info"
+            						android:layout_alignBottom="@+id/info"
+                                    android:layout_alignRight="@+id/prof"
+                                    android:gravity="right"
+                                    android:text="time"
+                                    android:textColor="#ACACAC"
+                                    android:textSize="12sp"
+                                    android:textStyle="bold" />
+  
+</RelativeLayout>

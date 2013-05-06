@@ -4,7 +4,8 @@
 	    android:layout_height="fill_parent"
 	    android:background="@drawable/login_background"
 	    android:gravity="center_vertical|center_horizontal|center"
-	    android:orientation="vertical" >
+	    android:orientation="vertical" 
+	    android:animateLayoutChanges="true">
 
 	    <ImageView
 	        android:id="@+id/imageView1"

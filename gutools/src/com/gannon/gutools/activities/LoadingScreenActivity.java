@@ -1,5 +1,6 @@
 package com.gannon.gutools.activities;
 import java.io.File;
+import java.util.Calendar;
 
 import net.sqlcipher.database.SQLiteDatabase;
 
@@ -33,6 +34,7 @@ public class LoadingScreenActivity extends Activity {
 	private String guXpress = "https://guxpress.gannon.edu/";
 	DBController controller = new DBController(this);
 	private CoursesDataSource datasource;
+	public String semester;
 	
 	@SuppressLint("SetJavaScriptEnabled")
 	public void onCreate(Bundle savedInstanceState) {
@@ -41,6 +43,17 @@ public class LoadingScreenActivity extends Activity {
 		//Following code instantiates the database to be ready to add courses
 		datasource = new CoursesDataSource(context.getApplicationContext());
 		datasource.open();
+		Calendar c = Calendar.getInstance(); 
+		int week = c.get(Calendar.WEEK_OF_YEAR);
+		int year = c.get(Calendar.YEAR);
+		semester = Integer.toString(year);
+		if(week<=20){
+			semester = "Spring " + semester; 
+		}else if (week<33){
+			semester = "Summer " + semester;
+		}else
+			semester = "Fall " + semester;
+		
 		
 		//Following deals with the controls that are displayed and hidden on this activity
 		pb = (ProgressBar) findViewById(R.id.loadingBar);
@@ -51,7 +64,7 @@ public class LoadingScreenActivity extends Activity {
 		webView.getSettings().setJavaScriptEnabled(true);
 		
 		//Set max function below sets the progress bar to 4 different states of progress
-		pb.setMax(4);
+		pb.setMax(6);
 		
 		//Gets the login information from the secure database and sends to the navigator class that uses
 		//the username and password to interface with the webview.
@@ -69,6 +82,7 @@ public class LoadingScreenActivity extends Activity {
 		{
 			@SuppressWarnings("unused")
 			public void processSchedule(String schedule){
+				Log.i("proc", "loaded");
 				Document doc = Jsoup.parse(schedule);	
 				int courseCount = doc.select("span#stuimg").size();
 				String name;
@@ -77,6 +91,7 @@ public class LoadingScreenActivity extends Activity {
 				String prof;
 				String cred;
 				String time;
+				Log.i("proc", schedule);
 				for(int currCourse = 1; currCourse <= courseCount; currCourse++) {
 					name = doc.getElementById("LIST_VAR6_" + Integer.toString(currCourse)).text().toString();
 					info = doc.getElementById("LIST_VAR12_" + Integer.toString(currCourse)).text().toString();
@@ -133,6 +148,20 @@ public class LoadingScreenActivity extends Activity {
 		    	 }else{
 		    		 login();
 		    	 }
+			}
+			@SuppressWarnings("unused")
+			public void processSemester(String sem){
+				Document doc = Jsoup.parse(sem);	
+				int semCount = doc.select("option").size();
+				for(int currSem = 0; currSem < semCount; currSem++) {
+					Log.i("Sem", semester);
+					if(doc.select("option").get(currSem).html().contains(semester)){
+						Log.i("semd", Integer.toString(currSem));
+						navigator.currentSemester(currSem);
+					}
+				}
+				navigator.navigate();
+				
 			}
 		}
 		// Register a new JavaScript interface called HTMLOUT

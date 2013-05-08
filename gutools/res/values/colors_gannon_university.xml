@@ -20,4 +20,5 @@
     <color name="pressed_gannon_university">#CCF9CF62</color>
     <color name="background_gray">#e5e5e5</color>
     <color name="dark_text">#343434</color>
+    <color name="trans">#00000000 </color>
 </resources>

@@ -1,7 +1,11 @@
 package com.gannon.gutools.activities;
 
 import java.io.File;
+import java.lang.reflect.Field;
+import java.text.DateFormatSymbols;
+import java.util.Calendar;
 
+import org.holoeverywhere.ArrayAdapter;
 import org.holoeverywhere.ThemeManager;
 
 import com.gannon.gutools.dev.R;
@@ -18,20 +22,25 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.support.v4.app.FragmentManager.OnBackStackChangedListener;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import org.holoeverywhere.addon.AddonSlidingMenu;
 import org.holoeverywhere.addon.AddonSlidingMenu.AddonSlidingMenuA;
 import org.holoeverywhere.app.Activity;
+import org.holoeverywhere.app.Dialog;
 import org.holoeverywhere.app.Fragment;
 import org.holoeverywhere.app.Activity.Addons;
+import org.holoeverywhere.widget.DatePicker;
+import org.holoeverywhere.widget.Spinner;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.slidingmenu.lib.SlidingMenu;
  
+@SuppressLint("NewApi")
 @Addons(Activity.ADDON_SLIDING_MENU)
 public class HomeActivity extends Activity implements OnBackStackChangedListener {
 	private int backpress;
@@ -45,11 +54,11 @@ public class HomeActivity extends Activity implements OnBackStackChangedListener
 	public static final String KEY_DISABLE_MUSIC = "disableMusic";
 	private static final String KEY_PAGE = "page";
 	private boolean mCreatedByThemeManager = false;
-	private int mCurrentPage = -1;
+	public int mCurrentPage;
 	public boolean mIsPlaying = false;
 	private Handler mHandler;
 	private boolean mStaticSlidingMenu;
-	
+
 	private ServiceConnection connection = new ServiceConnection(){
     	public void onServiceConnected(ComponentName className, IBinder service){
     		serviceBinder = ((StreamService.MyBinder)service).getService();
@@ -59,7 +68,7 @@ public class HomeActivity extends Activity implements OnBackStackChangedListener
     		serviceBinder=null;
     	}
     };
-	
+
 	public void startService() {
         i = new Intent(HomeActivity.this, StreamService.class);
         bindService(i, connection, Context.BIND_AUTO_CREATE);    	
@@ -102,7 +111,6 @@ public class HomeActivity extends Activity implements OnBackStackChangedListener
 	    }
 	    else
 	    	Toast.makeText(getApplicationContext(), " Press Back again to Exit ", Toast.LENGTH_SHORT).show();
-
 	}
 
 	@Override
@@ -112,15 +120,16 @@ public class HomeActivity extends Activity implements OnBackStackChangedListener
 	                getSupportFragmentManager().getBackStackEntryCount() > 0);
 	    }
 	}
-
+	public void onRestoreInstanceState(Bundle savedInstanceState){
+		mIsPlaying = savedInstanceState.getBoolean(KEY_DISABLE_MUSIC, false);
+        mCurrentPage = savedInstanceState.getInt(KEY_PAGE);
+	}
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 	    // This line restore instance state when we are change theme and
 	    // activity restarts
 		startService();
-	    savedInstanceState = instanceState(savedInstanceState);
 	    super.onCreate(savedInstanceState);
-	
 	    backpress=0;
 	    mCreatedByThemeManager = getIntent().getBooleanExtra(
 	            ThemeManager.KEY_CREATED_BY_THEME_MANAGER, false);
@@ -129,12 +138,13 @@ public class HomeActivity extends Activity implements OnBackStackChangedListener
 	
 	    if (savedInstanceState != null) {
 	        mIsPlaying = savedInstanceState.getBoolean(KEY_DISABLE_MUSIC, false);
-	        mCurrentPage = savedInstanceState.getInt(KEY_PAGE, 0);
+	        mCurrentPage = savedInstanceState.getInt(KEY_PAGE);
+	    } else {
+	    	mCurrentPage = 1;
 	    }
 	
 	    final ActionBar ab = getSupportActionBar();
 	    ab.setTitle(R.string.home);
-	
 	    setContentView(R.layout.content);
 	
 	    final AddonSlidingMenuA addonSM = addonSlidingMenu();
@@ -157,13 +167,22 @@ public class HomeActivity extends Activity implements OnBackStackChangedListener
 	        sm.setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
 	        sm.setSlidingEnabled(false);
 	    }
-	
 	    getSupportFragmentManager().addOnBackStackChangedListener(this);
 	   
 		getSupportFragmentManager()
 		.beginTransaction()
 		.replace(R.id.menu_frame, new NavigationFragment())
 		.commit();
+		if (mCurrentPage == 1){
+	    	replaceFragment(new HomeFragment());
+	    }else if (mCurrentPage == 2)
+	    	replaceFragment(new EventFragment());	
+	    else if (mCurrentPage == 3)
+	    	replaceFragment(new ScheduleFragment());
+	    else if (mCurrentPage == 4)
+	    	replaceFragment(new AssignmentFragment());
+	    else
+	    	replaceFragment(new WERGFragment());
 	}
 
 	@Override
@@ -174,19 +193,22 @@ public class HomeActivity extends Activity implements OnBackStackChangedListener
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getSupportMenuInflater().inflate(R.menu.menu, menu);
+		//Inflates the ABS with the menu that includes a logout
+		//getSupportMenuInflater().inflate(R.menu.settings_menu, menu);
         return super.onCreateOptionsMenu(menu);
-		}
-
-//	public boolean onOptionsItemSelected(MenuItem item) {
-        //This uses the imported MenuItem from ActionBarSherlock
- //       Toast.makeText(this, "Got click: " + item.toString(), Toast.LENGTH_SHORT).show();
-//        return true;
- //   }
+	}
+	public boolean onPrepareOptionsMenu(Menu menu){
+		if(mCurrentPage!=4)
+			getSupportMenuInflater().inflate(R.menu.settings_menu, menu);
+			else
+				getSupportMenuInflater().inflate(R.menu.assignment_menu, menu);
+		return super.onPrepareOptionsMenu(menu);
+	}
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-	    switch (item.getItemId()) {
+	    String[] array_spinner;
+		switch (item.getItemId()) {
 	        case android.R.id.home:
 	            if (!mStaticSlidingMenu
 	                    && getSupportFragmentManager().getBackStackEntryCount() == 0) {
@@ -206,30 +228,31 @@ public class HomeActivity extends Activity implements OnBackStackChangedListener
 	        	Intent intent = new Intent(this.getApplicationContext(), LoginActivity.class);
 			    startActivity(intent);
 	        	break;
+	        case R.id.add:
+	        	Dialog dialog = new Dialog(this);
+	        	dialog.setTitle("Add Assignment");
+				dialog.setContentView(R.layout.assignment_dialog);
+				//Calendar c = Calendar.getInstance(); 
+				//int month = c.get(Calendar.MONTH);
+				//int year = c.get(Calendar.YEAR);
+				//Calendar c = Calendar.getInstance(); 
+				//int month = c.get(Calendar.MONTH);
+				//int year = c.get(Calendar.YEAR);
+				//array_spinner=new String[12-month];
+				//for (int i=month; i<12; i++){
+				//	array_spinner[i-month] = new DateFormatSymbols().getMonths()[i];
+				//}
+				//Spinner s = (Spinner) dialog.findViewById(R.id.monthSpinner);
+				//ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+				//		R.layout.simple_spinner_dropdown_item, array_spinner);
+				//		s.setAdapter(adapter);
+						
+				dialog.show();
+	        	break;
 	        default:
 	            return super.onOptionsItemSelected(item);
 	    }
 	    return true;
-	}
-
-	@Override
-	protected void onPause() {
-	    super.onPause();
-	}
-
-	@Override
-	protected void onPostCreate(Bundle savedInstanceState) {
-	    savedInstanceState = instanceState(savedInstanceState);
-	    if (mCreatedByThemeManager && savedInstanceState != null) {
-	        savedInstanceState.putBoolean("SlidingActivityHelper.open", false);
-	        savedInstanceState.putBoolean("SlidingActivityHelper.secondary", false);
-	    }
-	    super.onPostCreate(savedInstanceState);
-	}
-
-	@Override
-	protected void onResume() {
-	    super.onResume();
 	}
 
 	@Override
@@ -248,16 +271,28 @@ public class HomeActivity extends Activity implements OnBackStackChangedListener
 
 	public void replaceFragment(Fragment fragment) {
 		ActionBar ab = getSupportActionBar();
-		if(fragment instanceof WERGFragment)
+		if(fragment instanceof WERGFragment){
 			ab.setTitle(R.string.WERGStream);
-		else if(fragment instanceof EventFragment)
+			mCurrentPage = 5;
+		}
+		else if(fragment instanceof EventFragment){
 			ab.setTitle(R.string.events);
-		else if(fragment instanceof ScheduleFragment)
+			mCurrentPage = 2;
+		}
+		else if(fragment instanceof ScheduleFragment){
 			ab.setTitle(R.string.classes);
-		else if(fragment instanceof AssignmentFragment)
+			mCurrentPage = 3;
+		}
+			
+		else if(fragment instanceof AssignmentFragment){
 			ab.setTitle(R.string.assignments);
-		else
+			mCurrentPage = 4;
+		}
+		else{
 			ab.setTitle(R.string.home);
+			mCurrentPage = 1;
+		}
+		invalidateOptionsMenu();
 		replaceFragment(fragment, null);
 	    addonSlidingMenu().showContent();
 	    

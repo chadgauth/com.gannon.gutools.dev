@@ -15,7 +15,6 @@ class ExtendedWebViewClient extends WebViewClient {
     
   
     public ExtendedWebViewClient(Navigator navigator) {
-		// TODO Auto-generated constructor stub
     	this.navigator = navigator;
 	}
 

@@ -20,7 +20,6 @@
        
         <activity
             android:name="com.gannon.gutools.activities.LoginActivity"
-            android:noHistory="true"
             android:windowSoftInputMode="adjustResize"
             android:label="@string/title_activity_main" android:theme="@style/Holo.Theme.NoActionBar"
             android:screenOrientation="portrait">
@@ -32,14 +31,12 @@
         </activity>
         <activity
             android:name="com.gannon.gutools.activities.LoadingScreenActivity"
-            android:noHistory="true"
             android:theme="@style/Holo.Theme.NoActionBar"
             android:label="@string/title_activity_web_view"
             android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.gannon.gutools.activities.HomeActivity"
-            android:noHistory="true"
             android:label="@string/title_activity_web_view" 
             android:screenOrientation="portrait">
 

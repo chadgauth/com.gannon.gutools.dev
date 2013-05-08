@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import net.sqlcipher.database.SQLiteDatabase;
@@ -49,8 +50,9 @@ public class LoginActivity extends Activity {
 	private int backpress;
 	private boolean mVisible;
 	TextWatcher tt = null;
+	
 	public void onCreate(Bundle savedInstanceState) {
-		mVisible=true;
+		mVisible=true;		
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 		StrictMode.setThreadPolicy(policy);
 		
@@ -61,6 +63,10 @@ public class LoginActivity extends Activity {
 		setContentView(R.layout.login_screen);
 		button = (Button) findViewById(R.id.button1);
 		ur = (EditText)findViewById(R.id.editText1);
+		if(savedInstanceState != null){
+			ur.setText(savedInstanceState.getString("ur"));
+		}
+		//TODO: Fix the login lag
 		tt = new TextWatcher() {
 	           public void afterTextChanged(Editable s){
 	                ur.setSelection(s.length());
@@ -170,7 +176,11 @@ public class LoginActivity extends Activity {
 	protected void onPause() {
 		super.onPause();
 	}
-
+    @Override
+    protected void onSaveInstanceState(Bundle outState){
+    	super.onSaveInstanceState(outState);
+    	outState.putString("ur", ur.getText().toString());
+    }
 	@Override
 	protected void onResume() {
 		super.onResume();

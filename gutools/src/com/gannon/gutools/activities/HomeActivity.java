@@ -207,7 +207,7 @@ public class HomeActivity extends Activity implements OnBackStackChangedListener
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-	    String[] array_spinner;
+	    //String[] array_spinner;
 		switch (item.getItemId()) {
 	        case android.R.id.home:
 	            if (!mStaticSlidingMenu
@@ -229,7 +229,10 @@ public class HomeActivity extends Activity implements OnBackStackChangedListener
 			    startActivity(intent);
 	        	break;
 	        case R.id.add:
-	        	Dialog dialog = new Dialog(this);
+	        	AssignmentFragment af = (AssignmentFragment) this.getSupportFragmentManager()
+	        	.findFragmentById(R.id.content);
+	        	af.setVisibility(true);
+	        	/*	Dialog dialog = new Dialog(this);
 	        	dialog.setTitle("Add Assignment");
 				dialog.setContentView(R.layout.assignment_dialog);
 				//Calendar c = Calendar.getInstance(); 
@@ -248,6 +251,7 @@ public class HomeActivity extends Activity implements OnBackStackChangedListener
 				//		s.setAdapter(adapter);
 						
 				dialog.show();
+				*/
 	        	break;
 	        default:
 	            return super.onOptionsItemSelected(item);

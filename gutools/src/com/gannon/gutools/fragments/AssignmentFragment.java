@@ -6,6 +6,7 @@ import java.util.Random;
 
 import org.holoeverywhere.ArrayAdapter;
 import org.holoeverywhere.LayoutInflater;
+import org.holoeverywhere.app.Activity;
 import org.holoeverywhere.app.ListFragment;
 import org.holoeverywhere.widget.Button;
 import org.holoeverywhere.widget.EditText;
@@ -73,8 +74,10 @@ public class AssignmentFragment extends ListFragment implements View.OnClickList
 					comment = datasource.createAssignment(assignText.getText().toString());
 					adapter.add(comment);
 					setVisibility(false);
-				}else
+				}else{
 					Toast.makeText(getActivity(), " Assignment can't be blank ", Toast.LENGTH_SHORT);
+					setVisibility(false);
+				}
 		      // Save the new comment to the database
 		      
 		      break;
@@ -99,7 +102,7 @@ public class AssignmentFragment extends ListFragment implements View.OnClickList
 	}
 	public void onActivityResult(int requestCode, int resultCode, Intent data)
 	{
-	    if (requestCode == REQUEST_CODE)
+	    if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK)
 	    {
 	        // Populate the wordsList with the String values the recognition engine thought it heard
 	        ArrayList<String> matches = data.getStringArrayListExtra(

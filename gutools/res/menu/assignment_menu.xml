@@ -6,12 +6,4 @@
 		android:icon="@drawable/ic_action_add_activity" 
 		android:showAsAction="always">
 	</item>
-	<item
-		android:id="@+id/settings"
-		android:title="Settings" android:icon="@drawable/abs__ic_menu_moreoverflow_normal_holo_dark" 
-		android:showAsAction="always">
-		<menu>
-			<item android:id="@+id/logout" android:title="Logout"/>
-		</menu>
-	</item>
 </menu>

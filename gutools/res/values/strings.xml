@@ -15,7 +15,7 @@
         <item>WERG Stream</item>
     </string-array>
     <string name="home">Home</string>
-    <string name="events">Events</string>
+    <string name="events">News</string>
     <string name="classes">Classes</string>
     <string name="assignments">Assignments</string>
     <string name="WERGStream">WERG Stream</string>

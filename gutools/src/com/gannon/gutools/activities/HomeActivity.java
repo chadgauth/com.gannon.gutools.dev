@@ -30,6 +30,7 @@ import org.holoeverywhere.app.Fragment;
 import org.holoeverywhere.app.Activity.Addons;
 import org.holoeverywhere.widget.DatePicker;
 import org.holoeverywhere.widget.Spinner;
+import org.holoeverywhere.widget.TextView;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
@@ -313,19 +314,23 @@ public class HomeActivity extends Activity implements OnBackStackChangedListener
 
 	@Override
 	public void onItemSelected(String id) {
-		Article selected = (Article) 
-				((ArticleListFragment) getSupportFragmentManager().findFragmentById(R.id.article_list))
-				.getListAdapter().getItem(Integer.parseInt(id));
+		//Article selected = (Article) 
+		//		((ArticleListFragment) getSupportFragmentManager().findFragmentById(R.id.article_list))
+		//		.getListAdapter().getItem(Integer.parseInt(id));
+		//TextView textView = (TextView) ((ArticleListFragment) getSupportFragmentManager().findFragmentById(R.id.article_list))
+		//.getView().findViewById(R.id.article_listing_smallprint);
+		
+		
         
         //mark article as read
-        selected.setRead(true);
-        ArticleListAdapter adapter = (ArticleListAdapter) ((ArticleListFragment) getSupportFragmentManager().findFragmentById(R.id.article_list)).getListAdapter();
-        adapter.notifyDataSetChanged();
+        //selected.setRead(true);
+        //ArticleListAdapter adapter = (ArticleListAdapter) ((ArticleListFragment) getSupportFragmentManager().findFragmentById(R.id.article_list)).getListAdapter();
+        //adapter.notifyDataSetChanged();
         
-        Log.i("test", selected.getGuid());
+        //Log.i("test", selected.getGuid());
         
-        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(selected.getGuid()));
-        startActivity(browserIntent);
+       // Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(textView.getText().toString()));
+       // startActivity(browserIntent);
 	}
  
 }

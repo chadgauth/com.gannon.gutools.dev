@@ -38,10 +38,6 @@ public class ArticleListFragment extends ListFragment{
         }
     };
 
-    public ArticleListFragment() {
-    	setHasOptionsMenu(true);	//this enables us to set actionbar from fragment
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,7 +63,12 @@ public class ArticleListFragment extends ListFragment{
     @Override
     public void onListItemClick(ListView listView, View view, int position, long id) {
         super.onListItemClick(listView, view, position, id);
-        mCallbacks.onItemSelected(String.valueOf(position));
+        //mCallbacks.onItemSelected(String.valueOf(position));
+        Article selected = (Article) getListAdapter().getItem(position);
+        selected.setRead(true);
+        //ArticleListAdapter adapter = (ArticleListAdapter) ((ArticleListFragment) getSupportFragmentManager().findFragmentById(R.id.article_list)).getListAdapter();
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(selected.getGuid()));
+        startActivity(browserIntent);
     }
 
     @Override
@@ -83,7 +84,18 @@ public class ArticleListFragment extends ListFragment{
                 ? ListView.CHOICE_MODE_SINGLE
                 : ListView.CHOICE_MODE_NONE);
     }
-
+    public ArticleListFragment() {
+    	setHasOptionsMenu(true);	//this enables us to set actionbar from fragment
+    }
+	@Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.actionbar_refresh) {
+        	refreshList();
+        	return true;
+        }
+        return false;
+    }
     public void setActivatedPosition(int position) {
         if (position == ListView.INVALID_POSITION) {
             getListView().setItemChecked(mActivatedPosition, false);
@@ -92,22 +104,6 @@ public class ArticleListFragment extends ListFragment{
         }
 
         mActivatedPosition = position;
-    }
-    
-    
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.refresh_menu, menu);
-    }
-    
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.actionbar_refresh) {
-        	refreshList();
-        	return true;
-        }
-        return false;
     }
     
     private void refreshList(){

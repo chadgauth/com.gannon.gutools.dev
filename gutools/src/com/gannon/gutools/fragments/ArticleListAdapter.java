@@ -38,8 +38,9 @@ public class ArticleListAdapter extends ArrayAdapter<Article> {
 		String pubDate = article.getPubDate();
 		//SimpleDateFormat df = new SimpleDateFormat("EEE, dd MMM yyyy kk:mm:ss Z", Locale.ENGLISH);
 		//Date pDate;
-		//	pDate = df.parse(pubDate);
+		//	pDate = (Date) df.parse(pubDate);
 			pubDate = "published " + "by " + article.getAuthor();
+		//pubDate = article.getGuid();
 			//+ DateUtils.getDateDifference(pDate) +
 		dateView.setText(pubDate);
 		

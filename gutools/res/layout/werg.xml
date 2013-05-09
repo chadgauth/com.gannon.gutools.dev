@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="#cacaca" >
+    android:background="#cacaca"
+    android:gravity="top" >
 
 		<Button
 		    android:id="@+id/view_main_button_mmswma"
@@ -11,9 +12,25 @@
 		    android:layout_alignParentBottom="true"
 		    android:layout_centerHorizontal="true"
 		    android:layout_marginBottom="22dp"
+		    android:background="@color/dark_text"
 		    android:enabled="false"
 		    android:minHeight="48dip"
+		    android:paddingLeft="10dp"
+		    android:paddingRight="10dp"
 		    android:text="@string/button_mmswma"
 		    android:textColor="#fff" />
+
+		<ImageView
+		    android:id="@+id/imageView1"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_alignParentLeft="true"
+		    android:layout_alignParentRight="true"
+		    android:layout_alignParentTop="true"
+		    android:layout_marginBottom="10dp"
+		    android:background="@color/dark_text"
+		    android:paddingBottom="20dp"
+		    android:paddingTop="10dp"
+		    android:src="@drawable/werg3" />
 
 </RelativeLayout>

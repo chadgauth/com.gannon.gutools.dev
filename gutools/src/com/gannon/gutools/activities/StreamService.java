@@ -48,7 +48,7 @@ public class StreamService extends Service implements com.spoledge.aacplayer.Pla
                                         AACPlayer.DEFAULT_AUDIO_BUFFER_CAPACITY_MS, 
                                         AACPlayer.DEFAULT_DECODE_BUFFER_CAPACITY_MS);
         aacPlayer.playAsync(getString(R.string.live_stream));
-        Notification note=new Notification(R.drawable.ic_action_add_activity,
+        Notification note=new Notification(R.drawable.ic_stat_music_notify,
                 "Music Playing",
                 System.currentTimeMillis());
         Intent i=new Intent(this, StreamService.class);
@@ -59,8 +59,8 @@ public class StreamService extends Service implements com.spoledge.aacplayer.Pla
 		PendingIntent pi=PendingIntent.getActivity(this, 0,
 		                        i, 0);
 	
-		note.setLatestEventInfo(this, "Now Playing:",
-		    "90.5 | Erie's Rock Alternative | Click to stop.",
+		note.setLatestEventInfo(this, "Now Playing 90.5 WERG",
+		    "Erie's Rock Alternative",
 		    pi);
 		note.flags|=Notification.FLAG_NO_CLEAR;
 		

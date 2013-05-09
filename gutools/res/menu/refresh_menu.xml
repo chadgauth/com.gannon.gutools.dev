@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+	<item android:id="@+id/actionbar_refresh"
+          android:title="@string/btn_refresh"
+          android:showAsAction="ifRoom|withText" 
+          android:icon="@drawable/abs__ic_menu_moreoverflow_normal_holo_dark"/>
+</menu>

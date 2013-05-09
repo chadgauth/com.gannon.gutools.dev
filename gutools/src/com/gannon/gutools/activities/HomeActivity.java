@@ -1,11 +1,6 @@
 package com.gannon.gutools.activities;
 
 import java.io.File;
-import java.lang.reflect.Field;
-import java.text.DateFormatSymbols;
-import java.util.Calendar;
-
-import org.holoeverywhere.ArrayAdapter;
 import org.holoeverywhere.ThemeManager;
 
 import com.gannon.gutools.dev.R;
@@ -17,6 +12,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -42,7 +38,7 @@ import com.slidingmenu.lib.SlidingMenu;
  
 @SuppressLint("NewApi")
 @Addons(Activity.ADDON_SLIDING_MENU)
-public class HomeActivity extends Activity implements OnBackStackChangedListener {
+public class HomeActivity extends Activity implements OnBackStackChangedListener, ArticleListFragment.Callbacks {
 	private int backpress;
 	public static interface OnMenuClickListener {
 	    public void onMenuClick(int position);
@@ -176,7 +172,7 @@ public class HomeActivity extends Activity implements OnBackStackChangedListener
 		if (mCurrentPage == 1){
 	    	replaceFragment(new HomeFragment());
 	    }else if (mCurrentPage == 2)
-	    	replaceFragment(new EventFragment());	
+	    	replaceFragment(new ArticleListFragment());	
 	    else if (mCurrentPage == 3)
 	    	replaceFragment(new ScheduleFragment());
 	    else if (mCurrentPage == 4)
@@ -198,13 +194,14 @@ public class HomeActivity extends Activity implements OnBackStackChangedListener
         return super.onCreateOptionsMenu(menu);
 	}
 	public boolean onPrepareOptionsMenu(Menu menu){
-		if(mCurrentPage!=4)
+		if(mCurrentPage==4)
+			getSupportMenuInflater().inflate(R.menu.assignment_menu, menu);
+		else if (mCurrentPage==2)
+			getSupportMenuInflater().inflate(R.menu.refresh_menu, menu);
+		else
 			getSupportMenuInflater().inflate(R.menu.settings_menu, menu);
-			else
-				getSupportMenuInflater().inflate(R.menu.assignment_menu, menu);
 		return super.onPrepareOptionsMenu(menu);
 	}
-	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    //String[] array_spinner;
@@ -279,7 +276,7 @@ public class HomeActivity extends Activity implements OnBackStackChangedListener
 			ab.setTitle(R.string.WERGStream);
 			mCurrentPage = 5;
 		}
-		else if(fragment instanceof EventFragment){
+		else if(fragment instanceof ArticleListFragment){
 			ab.setTitle(R.string.events);
 			mCurrentPage = 2;
 		}
@@ -312,6 +309,23 @@ public class HomeActivity extends Activity implements OnBackStackChangedListener
 	    ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
 	    ft.commit();
 	    addonSlidingMenu().showContent();
+	}
+
+	@Override
+	public void onItemSelected(String id) {
+		Article selected = (Article) 
+				((ArticleListFragment) getSupportFragmentManager().findFragmentById(R.id.article_list))
+				.getListAdapter().getItem(Integer.parseInt(id));
+        
+        //mark article as read
+        selected.setRead(true);
+        ArticleListAdapter adapter = (ArticleListAdapter) ((ArticleListFragment) getSupportFragmentManager().findFragmentById(R.id.article_list)).getListAdapter();
+        adapter.notifyDataSetChanged();
+        
+        Log.i("test", selected.getGuid());
+        
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(selected.getGuid()));
+        startActivity(browserIntent);
 	}
  
 }

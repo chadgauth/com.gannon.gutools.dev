@@ -24,5 +24,6 @@
 	<string name="text_buffering">Buffering&#8230;</string>
 	<string name="text_playing">Stop Listening</string>
 	<string name="live_stream">mms://wstream.gannon.edu/WERGi</string>
+	<string name="btn_refresh">Refresh</string>
 
 </resources>

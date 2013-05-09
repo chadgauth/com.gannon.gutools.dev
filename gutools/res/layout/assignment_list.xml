@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/background_gray" 
+    android:animateLayoutChanges="true">
+
+	<ListView
+
+		android:id="@android:id/android:list"
+
+		android:layout_width="fill_parent"
+
+		android:layout_height="wrap_content"
+
+		android:cacheColorHint="#00000000"
+
+		/>
+
+	<RelativeLayout
+	    android:id="@+id/floatingFrame"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentTop="true"
+	    android:layout_marginTop="10dp"
+	    android:background="@drawable/search_bg_shadow2" >
+
+		<ImageButton
+		    android:id="@+id/addButton"
+		    android:layout_width="47dp"
+		    android:layout_height="47dp"
+		    android:layout_alignParentRight="true"
+		    android:layout_alignParentTop="true"
+		    android:background="@color/trans"
+		    android:src="@drawable/ic_add_button" />
+
+		<ImageButton
+		    android:id="@+id/micButton"
+		    android:layout_width="47dp"
+		    android:layout_height="47dp"
+		    android:layout_alignParentLeft="true"
+		    android:layout_centerVertical="true"
+		    android:background="@color/trans"
+		    android:src="@drawable/ic_microphone" />
+
+		<EditText
+		    android:id="@+id/assignmentText"
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:layout_centerVertical="true"
+		    android:layout_toLeftOf="@+id/addButton"
+		    android:layout_toRightOf="@+id/micButton"
+		    android:background="@color/trans"
+		    android:ems="20" >
+
+		    <requestFocus />
+		</EditText>
+
+	</RelativeLayout>
+
+ </RelativeLayout>

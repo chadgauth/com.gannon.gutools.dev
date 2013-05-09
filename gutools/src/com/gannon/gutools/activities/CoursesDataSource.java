@@ -1,5 +1,6 @@
 package com.gannon.gutools.activities;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import android.content.ContentValues;
@@ -80,6 +81,33 @@ public class CoursesDataSource {
 	    return courses;
 	    
 	  }
+	  public List<Course> getTodaysCourses() {
+		    List<Course> courses = new ArrayList<Course>();
+		    Calendar calendar = Calendar.getInstance();
+		    int day = calendar.get(Calendar.DAY_OF_WEEK); 
+		    String select = DBController.COLUMN_M;
+		    if(day==3){
+		    	select = DBController.COLUMN_T;
+		    }else if(day==4){
+		    	select = DBController.COLUMN_W;
+		    }else if(day==5){
+		    	select = DBController.COLUMN_TH;
+		    }else if(day==6){
+		    	select = DBController.COLUMN_F;
+		    }
+		    Cursor cursor = database.query(DBController.TABLE_COURSES,
+		        allColumns, select+"='1'", null, null, null, null);
+		    cursor.moveToFirst();
+		    while (!cursor.isAfterLast()) {
+		      Course course = cursorToCourse(cursor);
+		      courses.add(course);
+		      cursor.moveToNext();
+		    }
+		    // Make sure to close the cursor
+		    cursor.close();
+		    return courses;
+		    
+		  }
 	  private Course cursorToCourse(Cursor cursor) {
 	    Course course = new Course();
 	    course.setId(cursor.getLong(0));

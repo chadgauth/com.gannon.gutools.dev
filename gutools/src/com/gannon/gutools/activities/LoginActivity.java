@@ -35,6 +35,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
 import org.holoeverywhere.widget.EditText;
@@ -100,8 +101,6 @@ public class LoginActivity extends Activity {
 			  public void onClick(View arg0) {
 				  postLoginData();		
 				  toggleInputs();
-				  InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-				  imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
 			  }
 	 
 			});
@@ -109,11 +108,17 @@ public class LoginActivity extends Activity {
 	}
 	public void toggleInputs(){
 		if(mVisible){
+			button.setEnabled(false);
+			ur.setEnabled(false);
+			ps.setEnabled(false);
 			button.setVisibility(View.GONE);
 			ur.setVisibility(View.GONE);
 			ps.setVisibility(View.GONE);
 		} 
 		else{
+			button.setEnabled(true);
+			ur.setEnabled(true);
+			ps.setEnabled(true);
 			button.setVisibility(View.VISIBLE);
 			ur.setVisibility(View.VISIBLE);
 			ps.setVisibility(View.VISIBLE);
@@ -186,7 +191,11 @@ public class LoginActivity extends Activity {
 		super.onResume();
 	}
     private void postLoginData() {
+    	getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         // Create a new HttpClient and Post Header
+    	//InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+    	//if(imm.isAcceptingText())
+    	//	imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
         HttpClient httpclient = new DefaultHttpClient();
         
         /* login.php returns true if username and password is equal to saranga */
@@ -209,6 +218,8 @@ public class LoginActivity extends Activity {
             	Toast.makeText(getApplicationContext(), " Invalid Username or Password ", Toast.LENGTH_SHORT).show();  
           	  	toggleInputs();
 				ps.setText("");
+			//	if(!imm.isAcceptingText())
+			//		imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
 				
             }else
             {

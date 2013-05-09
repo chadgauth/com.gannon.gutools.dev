@@ -13,6 +13,6 @@ public class EventFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		// construct the RelativeLayout
-		return inflater.inflate(R.layout.list);
+		return inflater.inflate(R.layout.assignment_list);
 	}
 }

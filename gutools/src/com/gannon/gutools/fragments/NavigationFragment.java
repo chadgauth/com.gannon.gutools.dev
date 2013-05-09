@@ -36,7 +36,7 @@ public class NavigationFragment extends ListFragment {
 			newContent = new HomeFragment();
 			break;
 		case 1:
-			newContent = new EventFragment();
+			newContent = new ArticleListFragment();
 			break;
 		case 2:
 			newContent = new ScheduleFragment();
